@@ -22,6 +22,7 @@ HLight.FConcurentLang= function( map ){
 	var syntaxes= []
 	for( var syntax in map ) syntaxes.push( syntax )
 	var parser= RegExp( '([\\s\\S]*?)((' + syntaxes.join( ')|(' ) + ')|$)', 'g' )
+//	console.log( parser );
 	var proc= function( str, prefix, content ){
 		prefix= HLight.lang.text( prefix || '' )
 		if( !content ) return prefix
@@ -43,3 +44,19 @@ HLight.FConcurentLang= function( map ){
 		return String( str || '' ).replace( parser, proc )
 	})
 }
+
+HLight.revert= function( str ){
+	noLFCR:     str= str.split( /\r/ ).join( '' )
+	stripTags:  str= str.split( /<.*?>/ ).join( '' )
+	decodeNBSP: str= str.split( '&nbsp;' ).join( ' ' )
+	decodeGT:   str= str.split( '&gt;' ).join( '>' )
+	decodeLT:   str= str.split( '&lt;' ).join( '<' )
+	decodeAMP:  str= str.split( '&amp;' ).join( '&' )
+	return str
+}
+
+CComponent( 'i:hlight', function( el ){
+	var lang= CHiqus( el.className ).get( 'lang' )
+	var hlight= HLight.lang[ lang ] || HLight.lang.text
+	el.innerHTML= hlight( HLight.revert( el.innerHTML ) )
+})
