@@ -55,7 +55,7 @@ HLight.revert= function( str ){
 	return str
 }
 
-CComponent( 'i:hlight', function( el ){
+CComponent( 'std:hlight', function( el ){
 	var lang= CHiqus( el.className ).get( 'lang' )
 	var hlight= HLight.lang[ lang ] || HLight.lang.text
 	el.innerHTML= hlight( HLight.revert( el.innerHTML ) )
